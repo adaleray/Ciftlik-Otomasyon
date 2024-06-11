@@ -1,0 +1,293 @@
+-- Table: public.departman
+
+-- DROP TABLE IF EXISTS public.departman;
+
+CREATE TABLE IF NOT EXISTS public.departman
+(
+    departman_id integer NOT NULL DEFAULT nextval('departman_departman_id_seq'::regclass),
+    departman_adi character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    kontenjan integer,
+    CONSTRAINT departman_pkey PRIMARY KEY (departman_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.departman
+    OWNER to postgres;
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------
+
+-- Table: public.eksik_yem
+
+-- DROP TABLE IF EXISTS public.eksik_yem;
+
+CREATE TABLE IF NOT EXISTS public.eksik_yem
+(
+    id integer NOT NULL DEFAULT nextval('eksik_yem_id_seq'::regclass),
+    kuepe_numarasi character varying(20) COLLATE pg_catalog."default",
+    dogal_yem_miktar numeric(10,2),
+    hazir_yem_miktar numeric(10,2),
+    tarih date,
+    CONSTRAINT eksik_yem_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.eksik_yem
+    OWNER to postgres;
+
+
+--------------------------------------------------------------------
+
+-- Table: public.hayvan
+
+-- DROP TABLE IF EXISTS public.hayvan;
+
+CREATE TABLE IF NOT EXISTS public.hayvan
+(
+    hayvan_id integer NOT NULL DEFAULT nextval('hayvan_hayvan_id_seq'::regclass),
+    irk character varying(50) COLLATE pg_catalog."default",
+    kuepe_numarasi character varying(20) COLLATE pg_catalog."default",
+    dogum_tarihi date,
+    hastaliklari character varying(100) COLLATE pg_catalog."default",
+    yavrulama_sayisi integer,
+    cinsiyet character varying(10) COLLATE pg_catalog."default",
+    kilo numeric(10,2),
+    gunluk_sut numeric(10,2),
+    tuketilen_besin_kg numeric(10,2),
+    fiyat numeric(10,2),
+    bilgi text COLLATE pg_catalog."default",
+    CONSTRAINT hayvan_pkey PRIMARY KEY (hayvan_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.hayvan
+    OWNER to postgres;
+
+------------------------------------------------------------------
+
+-- Table: public.hayvanlar
+
+-- DROP TABLE IF EXISTS public.hayvanlar;
+
+CREATE TABLE IF NOT EXISTS public.hayvanlar
+(
+    hayvan_id integer NOT NULL DEFAULT nextval('hayvanlar_hayvan_id_seq'::regclass),
+    tur character varying(50) COLLATE pg_catalog."default",
+    dogal_yem integer,
+    hazir_yem integer,
+    gunluk_su integer,
+    asilama text COLLATE pg_catalog."default",
+    tirnak_bakim text COLLATE pg_catalog."default",
+    gezginlik text COLLATE pg_catalog."default",
+    sut_verim integer,
+    max_yavrulama integer,
+    notlar text COLLATE pg_catalog."default",
+    CONSTRAINT hayvanlar_pkey PRIMARY KEY (hayvan_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.hayvanlar
+    OWNER to postgres;
+
+_----------------------------------------------------------------
+
+-- Table: public.personel
+
+-- DROP TABLE IF EXISTS public.personel;
+
+CREATE TABLE IF NOT EXISTS public.personel
+(
+    personel_id integer NOT NULL DEFAULT nextval('personel_personel_id_seq'::regclass),
+    tc character varying(11) COLLATE pg_catalog."default" NOT NULL,
+    ad character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    soyad character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    telefon character varying(15) COLLATE pg_catalog."default",
+    mail character varying(100) COLLATE pg_catalog."default",
+    cinsiyet character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    maas numeric(10,2),
+    giris_tarihi date,
+    calisma_saati character varying(10) COLLATE pg_catalog."default",
+    departman_id integer,
+    deneyim_suresi text COLLATE pg_catalog."default",
+    CONSTRAINT personel_pkey PRIMARY KEY (personel_id),
+    CONSTRAINT personel_departman_id_fkey FOREIGN KEY (departman_id)
+        REFERENCES public.departman (departman_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.personel
+    OWNER to postgres;
+
+-------------------------------------------------------------------
+-- Table: public.sirketler
+
+-- DROP TABLE IF EXISTS public.sirketler;
+
+CREATE TABLE IF NOT EXISTS public.sirketler
+(
+    id integer NOT NULL DEFAULT nextval('sirketler_id_seq'::regclass),
+    ad character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    telefon character varying(15) COLLATE pg_catalog."default",
+    email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT sirketler_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.sirketler
+    OWNER to postgres;
+
+-------------------------------------------------------------------------
+-- Table: public.sorgutarih
+
+-- DROP TABLE IF EXISTS public.sorgutarih;
+
+CREATE TABLE IF NOT EXISTS public.sorgutarih
+(
+    tarih date,
+    tarih_id integer NOT NULL DEFAULT 1,
+    CONSTRAINT sorgutarih_pkey PRIMARY KEY (tarih_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.sorgutarih
+    OWNER to postgres;
+
+--------------------------------------------------------------------
+
+-- Table: public.stok
+
+-- DROP TABLE IF EXISTS public.stok;
+
+CREATE TABLE IF NOT EXISTS public.stok
+(
+    id integer NOT NULL DEFAULT nextval('stok_id_seq'::regclass),
+    dogalyem integer NOT NULL DEFAULT 0,
+    haziryem integer NOT NULL DEFAULT 0,
+    tarih timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    son_guncelleme_tarihi date,
+    CONSTRAINT stok_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.stok
+    OWNER to postgres;
+
+-----------------------------------------------------------------
+
+-- Table: public.t_login
+
+-- DROP TABLE IF EXISTS public.t_login;
+
+CREATE TABLE IF NOT EXISTS public.t_login
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 3 START 3 MINVALUE 1 MAXVALUE 9999 CACHE 1 ),
+    username text COLLATE pg_catalog."default" NOT NULL,
+    password text COLLATE pg_catalog."default" NOT NULL,
+    mail text COLLATE pg_catalog."default",
+    telefon text COLLATE pg_catalog."default",
+    ad text COLLATE pg_catalog."default",
+    soyad text COLLATE pg_catalog."default",
+    CONSTRAINT t_login_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.t_login
+    OWNER to postgres;
+-----------------------------------------------------------------
+-- Table: public.yemsorgutarih
+
+-- DROP TABLE IF EXISTS public.yemsorgutarih;
+
+CREATE TABLE IF NOT EXISTS public.yemsorgutarih
+(
+    id integer NOT NULL DEFAULT nextval('yemsorgutarih_id_seq'::regclass),
+    tarih date NOT NULL,
+    CONSTRAINT yemsorgutarih_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.yemsorgutarih
+    OWNER to postgres;
+
+------------------------------------------------------
+
+
+
+-- Insert data into departman table
+INSERT INTO public.departman (departman_adi, kontenjan)
+VALUES
+('Yazılım Geliştirme', 10),
+('İnsan Kaynakları', 5),
+('Pazarlama', 8);
+
+-- Insert data into eksik_yem table
+INSERT INTO public.eksik_yem (kuepe_numarasi, dogal_yem_miktar, hazir_yem_miktar, tarih)
+VALUES
+('12345', 10.50, 5.75, '2024-06-01'),
+('67890', 8.00, 6.25, '2024-06-02');
+
+-- Insert data into hayvanlar table
+INSERT INTO public.hayvanlar (tur, dogal_yem, hazir_yem, gunluk_su, asilama, tirnak_bakim, gezginlik, sut_verim, max_yavrulama, notlar)
+VALUES
+('Holstein', 5, 3, 10, 'Yılda bir', 'Aylık', 'Yaylım', 2, 3, 'Gezen hayvan'),
+('Jersey', 4, 2, 8, 'Yılda bir', 'Aylık', 'Yaylım', 3, 4, 'Gezen hayvan');
+
+-- Insert data into hayvan table
+INSERT INTO public.hayvan (irk, kuepe_numarasi, dogum_tarihi, hastaliklari, yavrulama_sayisi, cinsiyet, kilo, gunluk_sut, tuketilen_besin_kg, fiyat, bilgi)
+VALUES
+('Holstein', '001', '2022-01-01', 'None', 0, 'Dişi', 600.50, 25.00, 20.00, 12000.00, 'Sağlıklı'),
+('Jersey', '002', '2023-03-15', 'None', 1, 'Erkek', 500.00, 20.00, 15.00, 9000.00, 'Yeni doğan');
+
+-- Insert data into personel table
+INSERT INTO public.personel (tc, ad, soyad, telefon, mail, cinsiyet, maas, giris_tarihi, calisma_saati, departman_id, deneyim_suresi)
+VALUES
+('12345678901', 'Ali', 'Veli', '555-1234', 'ali@example.com', 'Erkek', 5000.00, '2022-01-01', '09:00-18:00', 1, '5 yıl'),
+('98765432109', 'Ayşe', 'Yılmaz', '555-5678', 'ayse@example.com', 'Kadın', 4500.00, '2023-03-15', '08:00-17:00', 2, '3 yıl');
+
+-- Insert data into sirketler table
+INSERT INTO public.sirketler (ad, telefon, email)
+VALUES
+('Şirket A', '555-1111', 'contact@companyA.com'),
+('Şirket B', '555-2222', 'contact@companyB.com');
+
+-- Insert data into sorgutarih table
+INSERT INTO public.sorgutarih (tarih, tarih_id)
+VALUES
+('2024-06-01', 1),
+('2024-06-02', 2);
+
+-- Insert data into stok table
+INSERT INTO public.stok (dogalyem, haziryem, son_guncelleme_tarihi)
+VALUES
+(100, 50, '2024-06-01'),
+(80, 40, '2024-06-02');
+
+-- Insert data into t_login table
+INSERT INTO public.t_login (username, password, mail, telefon, ad, soyad)
+VALUES
+('user1', 'password1', 'user1@example.com', '555-3333', 'User', 'One'),
+('user2', 'password2', 'user2@example.com', '555-4444', 'User', 'Two');
+
+-- Insert data into yemsorgutarih table
+INSERT INTO public.yemsorgutarih (tarih)
+VALUES
+('2024-06-01'),
+('2024-06-02');
